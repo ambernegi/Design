@@ -19,6 +19,39 @@ const config = {
     locales: ['en'],
   },
 
+  themeConfig: {
+    navbar: {
+      title: 'Autodesk Design Docs',
+      logo: {
+        alt: 'Autodesk',
+        src: 'img/autodesk-logo.svg',
+      },
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'docsSidebar',
+          position: 'left',
+          label: 'Docs',
+        },
+        {
+          href: 'https://aps.autodesk.com/en/docs/oauth/v2/developers_guide/overview/',
+          label: 'APS OAuth',
+          position: 'right',
+        },
+        {
+          href: 'https://docs.stripe.com/connect/required-verification-information',
+          label: 'Stripe Pattern',
+          position: 'right',
+        },
+      ],
+    },
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+  },
+
   presets: [
     [
       'classic',
