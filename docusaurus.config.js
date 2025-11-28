@@ -29,7 +29,6 @@ const config = {
           position: 'left',
           label: 'Docs',
         },
-        { type: 'search', position: 'right' },
       ],
     },
     colorMode: {
@@ -55,20 +54,6 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
-      }),
-    ],
-  ],
-
-  plugins: [
-    [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
-      ({
-        hashed: true,
-        indexDocs: true,
-        indexBlog: false,
-        docsRouteBasePath: 'docs',
-        highlightSearchTermsOnTargetPage: true,
       }),
     ],
   ],
