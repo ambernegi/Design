@@ -26,7 +26,6 @@ jobs:
 
       - name: Install dependencies and build site
         run: |
-          cd Design
           npm ci || npm install
           npm run build
 
@@ -34,7 +33,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./Design/build
+          publish_dir: ./build
           publish_branch: gh-pages
 
 
