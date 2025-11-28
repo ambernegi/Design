@@ -2,8 +2,8 @@
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Design Docs POC',
-  tagline: 'APS-style documentation system',
+  title: 'Autodesk',
+  tagline: 'Documentation System POC',
   url: 'https://ambernegi.github.io',
   baseUrl: '/Design/',
   favicon: 'img/favicon.ico',
@@ -21,11 +21,7 @@ const config = {
 
   themeConfig: {
     navbar: {
-      title: 'Autodesk Design Docs',
-      logo: {
-        alt: 'Autodesk',
-        src: 'img/autodesk-logo.svg',
-      },
+      title: 'Autodesk',
       items: [
         {
           type: 'docSidebar',
@@ -33,16 +29,7 @@ const config = {
           position: 'left',
           label: 'Docs',
         },
-        {
-          href: 'https://aps.autodesk.com/en/docs/oauth/v2/developers_guide/overview/',
-          label: 'APS OAuth',
-          position: 'right',
-        },
-        {
-          href: 'https://docs.stripe.com/connect/required-verification-information',
-          label: 'Stripe Pattern',
-          position: 'right',
-        },
+        { type: 'search', position: 'right' },
       ],
     },
     colorMode: {
@@ -59,7 +46,7 @@ const config = {
       ({
         docs: {
           path: 'docs',
-          routeBasePath: '/', // Serve docs at site root.
+          routeBasePath: 'docs', // Serve docs under /docs, leave / for custom landing page.
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
           showLastUpdateAuthor: false,
@@ -68,6 +55,20 @@ const config = {
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+      }),
+    ],
+  ],
+
+  plugins: [
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */
+      ({
+        hashed: true,
+        indexDocs: true,
+        indexBlog: false,
+        docsRouteBasePath: 'docs',
+        highlightSearchTermsOnTargetPage: true,
       }),
     ],
   ],
