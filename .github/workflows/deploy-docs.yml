@@ -23,12 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: npm
-          cache-dependency-path: Design/package.json
 
       - name: Install dependencies
         working-directory: Design
-        run: npm ci
+        run: npm install
 
       - name: Build Docusaurus site
         working-directory: Design
@@ -40,5 +38,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./Design/build
           publish_branch: gh-pages
+
 
 
