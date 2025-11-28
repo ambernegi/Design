@@ -82,62 +82,20 @@ This matches the clarity and scannability you see in the [Autodesk APS OAuth ove
 
 ---
 
-## 4. Example Docusaurus sidebar (navigation)
+## 4. Docusaurus layer and navigation
 
-The POC includes an example Docusaurus sidebar configuration in `docusaurus.sidebar.example.mts` that maps directly to the `docs/` folders:
+This repo is now a **Docusaurus docs site** configured to use `docs/` as the content root and an APS-style sidebar.
 
-```ts
-const sidebars = {
-  docsSidebar: [
-    {
-      type: 'category',
-      label: 'Overview',
-      collapsible: false,
-      items: [
-        'overview/intro',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Getting Started',
-      items: [
-        'getting-started/quickstart',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Guides',
-      items: [
-        'guides/oauth-auth-code',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Reference',
-      items: [
-        'reference/api/auth',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Concepts',
-      items: [
-        'concepts/security',
-      ],
-    },
-  ],
-};
+- **Key files**
+  - `docusaurus.config.js` – Main Docusaurus configuration.
+  - `sidebars.js` – Sidebar definition that mirrors the IA above.
+  - `src/css/custom.css` – Light visual customization for a doc-centric layout.
+  - `package.json` – NPM scripts and Docusaurus dependencies.
 
-export default sidebars;
-```
+The `docs` plugin is configured with:
 
-To use this in a Docusaurus project:
-
-- Copy the `docs/` directory into your Docusaurus repo.
-- Copy `docusaurus.sidebar.example.mts` into your project as `sidebars.mts` (or merge it with your existing config).
-- Ensure your Docusaurus config points to `docs` as the documentation directory.
-
-Any modern doc system that supports frontmatter and sidebars (Docusaurus, MkDocs, etc.) can map a similar hierarchy.
+- `path: 'docs'` – Use the `docs/` folder in this repo.
+- `routeBasePath: '/'` – Serve docs at the site root (`/`), so the overview page becomes your home.
 
 ---
 
@@ -161,3 +119,43 @@ Each follows the standard template so they can be cloned and customized as the d
 - **Extend reference** under `docs/reference/` with more endpoint groups.
 - **Add concepts** under `docs/concepts/` for any reusable idea that needs depth.
 - Keep the **frontmatter schema** and **section order** consistent to maintain a clean, APS-inspired experience across the docs.
+
+---
+
+## 7. Building and deploying on GitHub Pages
+
+You can host this site on **GitHub Pages** using the built-in Docusaurus deploy flow.
+
+- **Before you build**
+  - Edit `docusaurus.config.js` and replace:
+    - `url: 'https://<your-github-username>.github.io'`
+    - `baseUrl: '/<your-repo-name>/'`
+    - `organizationName: '<your-github-username>'`
+    - `projectName: '<your-repo-name>'`
+
+- **Install dependencies**
+
+```bash
+npm install
+```
+
+- **Run the site locally**
+
+```bash
+npm start
+```
+
+- **Build the static site**
+
+```bash
+npm run build
+```
+
+- **Deploy to GitHub Pages**
+
+```bash
+npm run deploy
+```
+
+By default, this will push the built site to the `gh-pages` branch (as configured in `docusaurus.config.js`), which you can then expose via GitHub Pages in the repo settings.
+
