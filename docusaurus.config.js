@@ -27,8 +27,6 @@ const config = {
         docs: {
           path: 'docs',
           routeBasePath: '/', // Serve docs at site root.
-          // Make the docs home page (/Design/) point to the Product Overview doc.
-          homePageId: 'overview/intro',
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
           showLastUpdateAuthor: false,

@@ -1,6 +1,7 @@
 ---
 title: Product Overview
 description: High-level introduction to the product, its primary use cases, and who it is for.
+slug: /
 tags:
   - overview
   - introduction
