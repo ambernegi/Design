@@ -4,11 +4,11 @@
 const config = {
   title: 'Design Docs POC',
   tagline: 'APS-style documentation system',
-  url: 'https://<your-github-username>.github.io',
-  baseUrl: '/<your-repo-name>/',
+  url: 'https://ambernegi.github.io',
+  baseUrl: '/Design/',
   favicon: 'img/favicon.ico',
-  organizationName: '<your-github-username>', // GitHub org/user name.
-  projectName: '<your-repo-name>', // GitHub repo name.
+  organizationName: 'ambernegi', // GitHub org/user name.
+  projectName: 'Design', // GitHub repo name.
   deploymentBranch: 'gh-pages',
 
   onBrokenLinks: 'throw',
