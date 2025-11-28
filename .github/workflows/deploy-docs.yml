@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies and build site
         run: |
           cd Design
-          npm install
+          npm ci || npm install
           npm run build
 
       - name: Deploy to gh-pages
@@ -36,6 +36,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./Design/build
           publish_branch: gh-pages
-
 
 
