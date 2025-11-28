@@ -22,14 +22,11 @@ const config = {
   themeConfig: {
     navbar: {
       title: 'Autodesk',
-      items: [
-        {
-          type: 'docSidebar',
-          sidebarId: 'docsSidebar',
-          position: 'left',
-          label: 'Docs',
-        },
-      ],
+      logo: {
+        alt: 'Autodesk',
+        src: 'img/autodesk-logo.svg',
+      },
+      items: [],
     },
     colorMode: {
       defaultMode: 'light',

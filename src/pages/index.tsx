@@ -10,6 +10,7 @@ type ApiTile = {
   description: string;
   category: ApiKind;
   href: string;
+  isBeta?: boolean;
 };
 
 const apis: ApiTile[] = [
@@ -39,6 +40,7 @@ const apis: ApiTile[] = [
     name: 'Metrics & Analytics',
     description: 'Access usage metrics to understand how your integrations perform.',
     category: 'free',
+    isBeta: true,
     href: '#',
   },
 ];
@@ -113,14 +115,24 @@ export default function Home(): JSX.Element {
             >
               <div className="api-tile-header">
                 <h2 className="api-tile-title">{api.name}</h2>
-                {api.category === 'monetized' && (
-                  <span
-                    className="api-tile-badge"
-                    title="This API may have associated costs."
-                  >
-                    $
-                  </span>
-                )}
+                <div className="api-tile-badges">
+                  {api.isBeta && (
+                    <span
+                      className="api-tile-badge api-tile-badge--beta"
+                      title="This API is in beta and may change."
+                    >
+                      Beta
+                    </span>
+                  )}
+                  {api.category === 'monetized' && (
+                    <span
+                      className="api-tile-badge"
+                      title="This API may have associated costs."
+                    >
+                      $
+                    </span>
+                  )}
+                </div>
               </div>
               <p className="api-tile-description">{api.description}</p>
               <span className="api-tile-cta">View docs →</span>
