@@ -1,4 +1,6 @@
-Convert an OpenAPI YAML or JSON spec into Docusaurus-ready per-endpoint Markdown documentation.
+Convert an OpenAPI YAML or JSON spec into Docusaurus-ready Reference documentation.
+
+The output goes into the **Reference** section of an existing API folder, or bootstraps a full new API folder with all three standard sections (Developer's Guide, How-to Guide, Reference).
 
 User arguments: $ARGUMENTS
 
@@ -8,7 +10,12 @@ User arguments: $ARGUMENTS
 
 Split `$ARGUMENTS` on whitespace:
 - **Arg 1** (required): absolute or relative path to the OpenAPI `.yaml` or `.json` file.
-- **Arg 2** (optional): output root directory. Default: `docs/<api-slug>/` next to the spec file where `<api-slug>` is the API title lowercased and hyphenated.
+- **Arg 2** (optional): target API folder under `docs/`. Default: `docs/<api-slug>/` where `<api-slug>` is `info.title` lowercased and hyphenated.
+
+The Reference docs always land at:
+```
+docs/<api-slug>/reference/
+```
 
 ---
 
@@ -19,7 +26,7 @@ Read the input file with the Read tool. Build a full in-memory model:
 1. **API metadata**: `info.title`, `info.version`, `info.description`, `servers[0].url`.
 2. **Tags**: the top-level `tags` array — each tag groups related endpoints.
 3. **Security schemes**: from `components.securitySchemes` — capture type, flow, token URL, scopes.
-4. **Schemas**: recursively resolve every `$ref` in `components.schemas`.  
+4. **Schemas**: recursively resolve every `$ref` in `components.schemas`.
    - Follow chains: if schema A `$ref`s schema B which `$ref`s schema C, inline C into B into A.
    - Handle `allOf`, `oneOf`, `anyOf` by merging properties.
    - Flatten nested objects into dot-notation rows: `route.provider.name`.
@@ -34,16 +41,15 @@ Read the input file with the Read tool. Build a full in-memory model:
 
 ## Step 2 — Plan the output structure
 
-Group operations by their **first tag**. The output directory tree is:
+All generated files live under `docs/<api-slug>/reference/`.
+Group operations by their **first tag**. The output tree is:
 
 ```
-<output-root>/
-  index.md                          ← API overview + endpoint table
+docs/<api-slug>/reference/
+  index.md                          ← Reference overview + full endpoint table
   <tag-slug>/
-    index.md                        ← Tag overview
+    index.md                        ← Tag overview + tag endpoint table
     <method>-<path-slug>.md         ← One file per operation
-    _category_.json
-  _category_.json
 ```
 
 Where:
@@ -53,35 +59,21 @@ Where:
 
 ---
 
-## Step 3 — Write the files
+## Step 3 — Write the Reference files
 
-### `_category_.json` (one per directory)
-
-```json
-{
-  "label": "<Human-readable label>",
-  "position": <numeric position>,
-  "link": {
-    "type": "doc",
-    "id": "<relative doc id of the index.md in this directory>"
-  }
-}
-```
-
-### `<output-root>/index.md`
+### `docs/<api-slug>/reference/index.md`
 
 ```markdown
 ---
-id: <api-slug>-index
 title: <info.title> Reference
 description: <info.description — first sentence>
-sidebar_label: Overview
+sidebar_label: Reference Overview
 sidebar_position: 1
 ---
 
-# <info.title>
+# <info.title> Reference
 
-**Version:** `<info.version>`  
+**Version:** `<info.version>`
 **Base URL:** `<servers[0].url>`
 
 <info.description — full text, verbatim>
@@ -101,11 +93,10 @@ sidebar_position: 1
 | `data:read` | ... |
 ```
 
-### `<output-root>/<tag-slug>/index.md`
+### `docs/<api-slug>/reference/<tag-slug>/index.md`
 
 ```markdown
 ---
-id: <api-slug>-<tag-slug>-index
 title: <Tag name>
 description: <Tag description from top-level tags array>
 sidebar_label: <Tag name>
@@ -123,13 +114,12 @@ sidebar_position: <tag position in tags array + 1>
 | `POST` | [`/machine-translate`](./post-machine-translate) | Machine Translate |
 ```
 
-### `<output-root>/<tag-slug>/<method>-<path-slug>.md`
+### `docs/<api-slug>/reference/<tag-slug>/<method>-<path-slug>.md`
 
-Use this exact structure. Omit any section that has no content — do not output empty tables or headings.
+Use this exact structure. Omit any section that has no content.
 
 ```markdown
 ---
-id: <api-slug>-<method>-<path-slug>
 title: <operation.summary>
 description: <First sentence of operation.description>
 sidebar_label: <operation.summary>
@@ -157,7 +147,6 @@ sidebar_position: <operation index within its tag group, 1-based>
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `<name>` | `<type>` | Yes / No | <description> |
 
 ### Path Parameters
 
@@ -193,7 +182,6 @@ Content type: `<mediaType>`
 |------|-------------|
 | `200` | <first sentence of the 200 description> |
 | `400` | <first sentence> |
-| ... | ... |
 
 ### `200` Response Body
 
@@ -217,60 +205,175 @@ Content type: `<mediaType>`
 |----------|------|-------------|
 | `title` | `string` | <description> |
 | `detail` | `string` | <description> |
-
-**Example**
-
-```json
-<first 4xx example value>
-```
 ```
 
 ---
 
-## Step 4 — Update `sidebars.js`
+## Step 4 — Bootstrap the API folder (if new)
 
-After writing all doc files, read the project's `sidebars.js` (search for it in the project root or `docs/` parent directory).
+Check whether `docs/<api-slug>/developer-guide/overview.md` already exists.
 
-Add a new top-level category entry for this API to the `docsSidebar` array:
+**If it does NOT exist**, create the full three-section structure with stubs:
 
-```js
-{
-  type: 'category',
-  label: '<info.title>',
-  collapsed: true,
-  link: {
-    type: 'doc',
-    id: '<relative-id-of-output-root-index>',
-  },
-  items: [
-    {
-      type: 'category',
-      label: '<Tag name>',
-      collapsed: false,
-      link: { type: 'doc', id: '<tag-index-id>' },
-      items: [
-        '<id-of-operation-1>',
-        '<id-of-operation-2>',
-      ],
-    },
-    // ... one category per tag
-  ],
-},
+### `docs/<api-slug>/developer-guide/overview.md`
+
+```markdown
+---
+title: Overview
+description: Introduction to <info.title> — what it does, when to use it, and how it fits into your workflow.
+sidebar_position: 1
+---
+
+# Overview
+
+<Write 2–3 sentences introducing the API based on info.description.>
+
+## When to use this API
+
+<Write 3 bullet points based on the API's purpose.>
+
+## Key concepts
+
+| Concept | Description |
+|---------|-------------|
+| <concept> | <description> |
+
+## Before you begin
+
+1. Register your app at the [APS Portal](https://aps.autodesk.com).
+2. Obtain an access token using the OAuth 2.0 flow appropriate for your use case.
 ```
 
+### `docs/<api-slug>/developer-guide/troubleshooting.md`
+
+```markdown
+---
+title: Troubleshooting
+description: Common errors and how to resolve them when using <info.title>.
+sidebar_position: 2
+---
+
+# Troubleshooting
+
+<For each HTTP error code in the spec's responses, write an H3 with the code + title, a cause sentence, and a Fix line.>
+
+## Checklist
+
+Before opening a support ticket, verify:
+
+- [ ] Token is valid and not expired
+- [ ] Token includes the required scopes
+- [ ] Request body is valid JSON
+```
+
+### `docs/<api-slug>/developer-guide/faq.md`
+
+```markdown
+---
+title: FAQ
+description: Frequently asked questions about <info.title>.
+sidebar_position: 3
+---
+
+# FAQ
+
+<Generate 4–6 FAQ entries based on common questions for this type of API (auth, content limits, data storage, credentials).>
+```
+
+### `docs/<api-slug>/how-to-guide/getting-started.md`
+
+```markdown
+---
+title: Getting Started
+description: Make your first successful API call in minutes.
+sidebar_position: 1
+---
+
+# Getting Started
+
+<Step-by-step guide: obtain token, make a first call using the simplest endpoint, handle the response. Use curl examples. Base on actual spec endpoints and schemas.>
+```
+
+---
+
+## Step 5 — Update `sidebars.js`
+
+Read `sidebars.js` from the project root.
+
+**Case A — API sidebar already exists** (a key named `<api-slug>Sidebar` or similar):
+- Find the `Reference` category within it.
+- Replace or add the Reference category items to match the newly generated docs.
+
+**Case B — No sidebar exists for this API yet**:
+Add a new complete sidebar entry:
+
+```js
+// ── <info.title> ────────────────────────────────────────────────────────────
+<apiSlug>Sidebar: [
+  { type: 'doc', id: '<api-slug>/developer-guide/overview', label: 'Overview' },
+  {
+    type: 'category',
+    label: "Developer's Guide",
+    collapsed: false,
+    items: [
+      '<api-slug>/developer-guide/troubleshooting',
+      '<api-slug>/developer-guide/faq',
+    ],
+  },
+  {
+    type: 'category',
+    label: 'How-to Guide',
+    collapsed: false,
+    items: ['<api-slug>/how-to-guide/getting-started'],
+  },
+  {
+    type: 'category',
+    label: 'Reference',
+    collapsed: false,
+    link: { type: 'doc', id: '<api-slug>/reference/index' },
+    items: [
+      // one entry per tag group:
+      {
+        type: 'category',
+        label: '<Tag name>',
+        collapsed: false,
+        link: { type: 'doc', id: '<api-slug>/reference/<tag-slug>/index' },
+        items: [
+          '<api-slug>/reference/<tag-slug>/<method>-<path-slug>',
+          // ...
+        ],
+      },
+    ],
+  },
+],
+```
+
+**`index.md` href rule**: When the root doc is named `index.md`, the doc ID ends in `/index` but the Docusaurus URL does NOT include `index` — Docusaurus strips it. Use the full ID in sidebar `id` fields, but when setting `href` in `src/pages/index.tsx`, omit the trailing `/index`.
+
 Write the updated `sidebars.js` back to disk.
+
+---
+
+## Step 6 — Update `src/pages/index.tsx` (if new API)
+
+If this is a new API (no existing card), add an entry to the `APIS` array following the pattern in the `/sync-api-cards` skill. Set:
+- `href: 'docs/<api-slug>/developer-guide/overview'`
+
+---
+
+## Step 7 — Validate
+
+Run `npm run build`. Fix any broken links before finishing. Do NOT change `onBrokenLinks` from `'throw'`.
 
 ---
 
 ## Rules
 
 - **Never output `$ref` strings** — always resolve inline before writing.
-- **Enum values** — list all allowed values as inline code in the description cell: `"en-US"`, `"en-GB"`.
+- **Enum values** — list all allowed values as inline code: `"en-US"`, `"en-GB"`.
 - **Required vs optional** — derive from the schema's `required` array; never guess.
-- **Descriptions are verbatim** — do not paraphrase, summarize, or rewrite spec descriptions.
-- **Links between docs** — use relative paths WITHOUT `.md` extension, e.g. `./get-languages` not `./get-languages.md`.
-- **doc IDs** — always set an explicit `id` in frontmatter so Docusaurus uses stable IDs regardless of file path.
+- **Descriptions are verbatim** — do not paraphrase or rewrite spec descriptions.
+- **Links between docs** — use relative paths WITHOUT `.md` extension.
 - **Omit empty sections** — if a section has no data, remove the heading entirely.
-- **Minimal examples** — if no example is in the spec, construct one using each required field with its `example` value or a plausible value of its `type`.
-- **`index.md` in a folder** — this becomes the category landing page; reference it in the `_category_.json`.
-- **Confirm on completion** — after writing all files, print a summary: files written, sidebars.js updated, any warnings (unresolvable $refs, missing examples, etc.).
+- **Reference only** — this skill generates Reference docs. Developer's Guide and How-to Guide stubs are created once on bootstrap; their content is written by humans or the `/sync-api-cards` skill.
+- **Confirm on completion** — print a summary: files written, sidebars.js updated, any warnings.

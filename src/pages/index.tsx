@@ -93,7 +93,7 @@ const APIS: Api[] = [
     name: 'Machine Translation API',
     description: 'Translate content programmatically across languages using Autodesk\'s machine translation service.',
     pricing: 'free',
-    href: 'docs/mt-api/v1/reference/http/mt-api',
+    href: 'docs/mt-api/developer-guide/overview',
     icon: <DocIcon />,
     industries: ['Cross-Industry'],
     capabilities: ['Document Management'],

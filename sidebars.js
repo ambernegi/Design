@@ -1,64 +1,76 @@
 /** @type {import('@docusaurus/plugin-content-docs').SidebarsConfig} */
 const sidebars = {
-  docsSidebar: [
+
+  // ── Design Automation API ────────────────────────────────────────────────
+  designAutomationSidebar: [
+    { type: 'doc', id: 'design-docs/intro', label: 'Overview' },
     {
       type: 'category',
-      label: 'Design Automation API',
+      label: "Developer's Guide",
       collapsed: false,
       items: [
-        'design-docs/intro',
-        {
-          type: 'category',
-          label: 'Getting Started',
-          collapsed: false,
-          items: ['design-docs/getting-started/quickstart'],
-        },
-        {
-          type: 'category',
-          label: 'Guides',
-          collapsed: false,
-          items: ['design-docs/guides/oauth-auth-code'],
-        },
-        {
-          type: 'category',
-          label: 'Reference',
-          collapsed: false,
-          items: ['design-docs/reference/auth'],
-        },
-        {
-          type: 'category',
-          label: 'Concepts',
-          collapsed: false,
-          items: ['design-docs/concepts/security'],
-        },
+        'design-docs/concepts/security',
       ],
     },
     {
       type: 'category',
-      label: 'Viewer API',
-      collapsed: true,
-      items: ['viewer-api/intro'],
+      label: 'How-to Guide',
+      collapsed: false,
+      items: [
+        'design-docs/getting-started/quickstart',
+        'design-docs/guides/oauth-auth-code',
+      ],
     },
     {
       type: 'category',
-      label: 'Webhooks',
-      collapsed: true,
-      items: ['webhooks/intro'],
+      label: 'Reference',
+      collapsed: false,
+      items: [
+        'design-docs/reference/auth',
+      ],
+    },
+  ],
+
+  // ── Viewer API ───────────────────────────────────────────────────────────
+  viewerSidebar: [
+    { type: 'doc', id: 'viewer-api/intro', label: 'Overview' },
+  ],
+
+  // ── Webhooks ─────────────────────────────────────────────────────────────
+  webhooksSidebar: [
+    { type: 'doc', id: 'webhooks/intro', label: 'Overview' },
+  ],
+
+  // ── Metrics & Analytics ──────────────────────────────────────────────────
+  metricsSidebar: [
+    { type: 'doc', id: 'metrics/intro', label: 'Overview' },
+  ],
+
+  // ── Machine Translation API ──────────────────────────────────────────────
+  mtApiSidebar: [
+    { type: 'doc', id: 'mt-api/developer-guide/overview', label: 'Overview' },
+    {
+      type: 'category',
+      label: "Developer's Guide",
+      collapsed: false,
+      items: [
+        'mt-api/developer-guide/troubleshooting',
+        'mt-api/developer-guide/faq',
+      ],
     },
     {
       type: 'category',
-      label: 'Metrics & Analytics',
-      collapsed: true,
-      items: ['metrics/intro'],
+      label: 'How-to Guide',
+      collapsed: false,
+      items: [
+        'mt-api/how-to-guide/getting-started',
+      ],
     },
     {
       type: 'category',
-      label: 'MT-API',
-      collapsed: true,
-      link: {
-        type: 'doc',
-        id: 'mt-api/v1/reference/http/mt-api/index',
-      },
+      label: 'Reference',
+      collapsed: false,
+      link: { type: 'doc', id: 'mt-api/v1/reference/http/mt-api/index' },
       items: [
         'mt-api/v1/reference/http/mt-api/post-machine-translate',
         'mt-api/v1/reference/http/mt-api/get-version',
@@ -66,6 +78,7 @@ const sidebars = {
       ],
     },
   ],
+
 };
 
 module.exports = sidebars;
