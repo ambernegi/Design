@@ -3,13 +3,13 @@ const sidebars = {
 
   // ── Design Automation API ────────────────────────────────────────────────
   designAutomationSidebar: [
-    { type: 'doc', id: 'design-docs/intro', label: 'Overview' },
+    { type: 'doc', id: 'design-docs/developer-guide/overview', label: 'Overview' },
     {
       type: 'category',
       label: "Developer's Guide",
       collapsed: false,
       items: [
-        'design-docs/concepts/security',
+        'design-docs/developer-guide/security',
       ],
     },
     {
@@ -17,8 +17,8 @@ const sidebars = {
       label: 'How-to Guide',
       collapsed: false,
       items: [
-        'design-docs/getting-started/quickstart',
-        'design-docs/guides/oauth-auth-code',
+        'design-docs/how-to-guide/getting-started',
+        'design-docs/how-to-guide/oauth-auth-code',
       ],
     },
     {
@@ -33,17 +33,62 @@ const sidebars = {
 
   // ── Viewer API ───────────────────────────────────────────────────────────
   viewerSidebar: [
-    { type: 'doc', id: 'viewer-api/intro', label: 'Overview' },
+    { type: 'doc', id: 'viewer-api/developer-guide/overview', label: 'Overview' },
+    {
+      type: 'category',
+      label: "Developer's Guide",
+      collapsed: false,
+      items: [
+        'viewer-api/developer-guide/troubleshooting',
+        'viewer-api/developer-guide/faq',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'How-to Guide',
+      collapsed: false,
+      items: ['viewer-api/how-to-guide/getting-started'],
+    },
   ],
 
   // ── Webhooks ─────────────────────────────────────────────────────────────
   webhooksSidebar: [
-    { type: 'doc', id: 'webhooks/intro', label: 'Overview' },
+    { type: 'doc', id: 'webhooks/developer-guide/overview', label: 'Overview' },
+    {
+      type: 'category',
+      label: "Developer's Guide",
+      collapsed: false,
+      items: [
+        'webhooks/developer-guide/troubleshooting',
+        'webhooks/developer-guide/faq',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'How-to Guide',
+      collapsed: false,
+      items: ['webhooks/how-to-guide/getting-started'],
+    },
   ],
 
   // ── Metrics & Analytics ──────────────────────────────────────────────────
   metricsSidebar: [
-    { type: 'doc', id: 'metrics/intro', label: 'Overview' },
+    { type: 'doc', id: 'metrics/developer-guide/overview', label: 'Overview' },
+    {
+      type: 'category',
+      label: "Developer's Guide",
+      collapsed: false,
+      items: [
+        'metrics/developer-guide/troubleshooting',
+        'metrics/developer-guide/faq',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'How-to Guide',
+      collapsed: false,
+      items: ['metrics/how-to-guide/getting-started'],
+    },
   ],
 
   // ── Machine Translation API ──────────────────────────────────────────────

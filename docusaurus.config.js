@@ -66,23 +66,18 @@ const config = {
       },
       items: [
         {
-          label: 'Getting Started',
-          to: '/docs/design-docs/getting-started/quickstart',
+          label: 'APIs',
+          to: '/',
           position: 'left',
         },
         {
-          label: 'Guides',
-          to: '/docs/design-docs/guides/oauth-auth-code',
+          label: 'Getting Started',
+          to: '/docs/design-docs/how-to-guide/getting-started',
           position: 'left',
         },
         {
           label: 'Reference',
           to: '/docs/design-docs/reference/auth',
-          position: 'left',
-        },
-        {
-          label: 'Concepts',
-          to: '/docs/design-docs/concepts/security',
           position: 'left',
         },
         {
@@ -98,10 +93,10 @@ const config = {
         {
           title: 'Docs',
           items: [
-            { label: 'Overview', to: '/docs/design-docs/intro' },
-            { label: 'Getting Started', to: '/docs/design-docs/getting-started/quickstart' },
-            { label: 'Guides', to: '/docs/design-docs/guides/oauth-auth-code' },
+            { label: 'API Catalog', to: '/' },
+            { label: 'Getting Started', to: '/docs/design-docs/how-to-guide/getting-started' },
             { label: 'Reference', to: '/docs/design-docs/reference/auth' },
+            { label: 'Machine Translation API', to: '/docs/mt-api/developer-guide/overview' },
           ],
         },
         {

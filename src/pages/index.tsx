@@ -52,7 +52,7 @@ const APIS: Api[] = [
     name: 'Design Automation API',
     description: 'Automate design workflows and access geometry data. Run scripts in the cloud to process CAD files, extract data, and generate outputs.',
     pricing: 'monetized',
-    href: 'docs/design-docs/intro',
+    href: 'docs/design-docs/developer-guide/overview',
     icon: <DocIcon />,
     industries: ['Cross-Industry'],
     capabilities: ['Document Management'],
