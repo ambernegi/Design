@@ -534,8 +534,10 @@ article.theme-doc-markdown {
   font-family: var(--ifm-font-family-base);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
   line-height: 1.4;
+  text-align: left;
 }
 .aps-pill:hover {
   border-color: var(--ifm-color-primary);
