@@ -66,21 +66,6 @@ const config = {
       },
       items: [
         {
-          label: 'APIs',
-          to: '/',
-          position: 'left',
-        },
-        {
-          label: 'Getting Started',
-          to: '/docs/design-docs/how-to-guide/getting-started',
-          position: 'left',
-        },
-        {
-          label: 'Reference',
-          to: '/docs/design-docs/reference/auth',
-          position: 'left',
-        },
-        {
           href: 'https://github.com/ambernegi/Design',
           label: 'GitHub',
           position: 'right',

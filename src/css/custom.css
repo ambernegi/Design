@@ -505,52 +505,68 @@ article.theme-doc-markdown {
 .aps-clear-btn:hover { opacity: 0.75; }
 
 /* Filter section */
-.aps-filter-section { display: flex; flex-direction: column; gap: 0.55rem; }
+.aps-filter-section { display: flex; flex-direction: column; gap: 0.6rem; }
 .aps-filter-label {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--aps-subtle);
+  color: var(--aps-body);
   margin: 0;
+}
+[data-theme='dark'] .aps-filter-label {
+  color: rgba(255,255,255,0.65);
 }
 
 /* Pills */
-.aps-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.aps-pills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 .aps-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.28rem 0.65rem;
-  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  border-radius: 6px;
   border: 1px solid var(--aps-border);
   background: var(--aps-white);
   color: var(--aps-body);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 500;
   font-family: var(--ifm-font-family-base);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
   white-space: nowrap;
+  line-height: 1.4;
 }
 .aps-pill:hover {
   border-color: var(--ifm-color-primary);
   color: var(--ifm-color-primary);
-  background: rgba(6,150,215,0.05);
+  background: rgba(6,150,215,0.06);
 }
 .aps-pill--active {
   border-color: var(--ifm-color-primary);
-  background: rgba(6,150,215,0.1);
-  color: var(--ifm-color-primary);
+  background: var(--ifm-color-primary);
+  color: #ffffff;
   font-weight: 600;
 }
+.aps-pill--active:hover {
+  background: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+  color: #ffffff;
+}
 [data-theme='dark'] .aps-pill {
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.72);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.82);
+}
+[data-theme='dark'] .aps-pill:hover {
+  background: rgba(24,167,232,0.12);
+  border-color: rgba(24,167,232,0.5);
+  color: #18a7e8;
 }
 [data-theme='dark'] .aps-pill--active {
-  background: rgba(24,167,232,0.14);
-  color: #18a7e8;
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: #ffffff;
 }
 
 /* Dollar sign inside pill */
