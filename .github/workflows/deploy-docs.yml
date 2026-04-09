@@ -1,20 +1,27 @@
-name: Deploy Docusaurus docs to GitHub Pages
+name: Docs CI / Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
+  # ─────────────────────────────────────────────────────────────
+  # Job 1: Validate — runs on every push and every pull request.
+  # Catches broken links, bad sidebar config, and type errors
+  # before anything reaches GitHub Pages.
+  # ─────────────────────────────────────────────────────────────
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -22,12 +29,45 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
+          cache: npm
 
-      - name: Install dependencies and build site
-        run: |
-          npm ci || npm install
-          npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript type check
+        run: npm run typecheck
+
+      - name: Docusaurus build
+        # onBrokenLinks is set to 'throw' in docusaurus.config.js, so this
+        # step fails the job if any internal link or sidebar reference is broken.
+        run: npm run build
+
+      # Only upload the artifact when we are on main (so deploy can reuse it).
+      - name: Upload build artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docusaurus-build
+          path: build/
+          retention-days: 1
+
+  # ─────────────────────────────────────────────────────────────
+  # Job 2: Deploy — runs only after validate succeeds, and only
+  # when a commit lands on main (not on PRs).
+  # ─────────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docusaurus-build
+          path: build/
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
@@ -35,5 +75,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           publish_branch: gh-pages
-
-
