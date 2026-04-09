@@ -10,6 +10,8 @@ const sidebars = {
       collapsed: false,
       items: [
         'design-docs/developer-guide/security',
+        'design-docs/developer-guide/troubleshooting',
+        'design-docs/developer-guide/faq',
       ],
     },
     {
