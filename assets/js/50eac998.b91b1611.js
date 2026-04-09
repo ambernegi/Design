@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdesign_docs_poc=self.webpackChunkdesign_docs_poc||[]).push([[925],{8191(e){e.exports=JSON.parse('{"tags":[{"label":"reference","permalink":"/Design/docs/tags/reference","count":1},{"label":"authentication","permalink":"/Design/docs/tags/authentication","count":1},{"label":"oauth","permalink":"/Design/docs/tags/oauth","count":1}]}')}}]);
