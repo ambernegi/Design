@@ -101,7 +101,11 @@ const APIS: Api[] = [
 ];
 
 const INDUSTRIES = [...new Set(APIS.flatMap((a) => a.industries))].sort();
-const CAPABILITIES = [...new Set(APIS.flatMap((a) => a.capabilities))].sort();
+const CAPABILITY_ORDER = ['Document Management', '3D Visualization'];
+const CAPABILITIES = [
+  ...CAPABILITY_ORDER.filter((c) => APIS.some((a) => a.capabilities.includes(c))),
+  ...[...new Set(APIS.flatMap((a) => a.capabilities))].filter((c) => !CAPABILITY_ORDER.includes(c)).sort(),
+];
 
 export default function Home() {
   const [search, setSearch] = useState('');
