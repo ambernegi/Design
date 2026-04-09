@@ -54,7 +54,7 @@ const APIS: Api[] = [
     pricing: 'monetized',
     href: 'docs/design-docs/developer-guide/overview',
     icon: <DocIcon />,
-    industries: ['Cross-Industry'],
+    industries: ['AEC'],
     capabilities: ['Document Management'],
   },
   {
@@ -64,7 +64,7 @@ const APIS: Api[] = [
     pricing: 'monetized',
     // href intentionally omitted — docs not yet available
     icon: <ViewerIcon />,
-    industries: ['AEC', 'Manufacturing & Production'],
+    industries: ['AEC'],
     capabilities: ['3D Visualization'],
   },
   {
@@ -74,8 +74,8 @@ const APIS: Api[] = [
     pricing: 'free',
     // href intentionally omitted — docs not yet available
     icon: <WebhookIcon />,
-    industries: ['Cross-Industry'],
-    capabilities: ['Automation'],
+    industries: ['AEC'],
+    capabilities: ['Document Management'],
   },
   {
     id: 'metrics',
@@ -85,8 +85,8 @@ const APIS: Api[] = [
     isBeta: true,
     // href intentionally omitted — docs not yet available
     icon: <MetricsIcon />,
-    industries: ['Cross-Industry'],
-    capabilities: ['Data Management'],
+    industries: ['AEC'],
+    capabilities: ['Document Management'],
   },
   {
     id: 'mt-api',
@@ -95,7 +95,7 @@ const APIS: Api[] = [
     pricing: 'free',
     href: 'docs/mt-api/developer-guide/overview',
     icon: <DocIcon />,
-    industries: ['Cross-Industry'],
+    industries: ['AEC'],
     capabilities: ['Document Management'],
   },
 ];
