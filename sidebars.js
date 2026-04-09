@@ -3,7 +3,7 @@ const sidebars = {
   docsSidebar: [
     {
       type: 'category',
-      label: 'Design Docs',
+      label: 'Design Automation API',
       collapsed: false,
       items: [
         'design-docs/intro',

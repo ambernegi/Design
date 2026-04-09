@@ -88,6 +88,16 @@ const APIS: Api[] = [
     industries: ['Cross-Industry'],
     capabilities: ['Data Management'],
   },
+  {
+    id: 'mt-api',
+    name: 'Machine Translation API',
+    description: 'Translate content programmatically across languages using Autodesk\'s machine translation service.',
+    pricing: 'free',
+    href: 'docs/mt-api/v1/reference/http/mt-api',
+    icon: <DocIcon />,
+    industries: ['Cross-Industry'],
+    capabilities: ['Document Management'],
+  },
 ];
 
 const INDUSTRIES = [...new Set(APIS.flatMap((a) => a.industries))].sort();
