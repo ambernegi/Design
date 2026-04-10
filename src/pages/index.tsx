@@ -39,12 +39,6 @@ const WebhookIcon = () => (
   </svg>
 );
 
-const MetricsIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-    <path d="M3 14l4-5 4 3 4-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M3 17h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
-);
 
 const APIS: Api[] = [
   {
@@ -74,17 +68,6 @@ const APIS: Api[] = [
     pricing: 'free',
     // href intentionally omitted — docs not yet available
     icon: <WebhookIcon />,
-    industries: ['AEC'],
-    capabilities: ['Document Management'],
-  },
-  {
-    id: 'metrics',
-    name: 'Metrics & Analytics',
-    description: 'Access usage metrics and telemetry to understand how your integrations perform and where to optimize.',
-    pricing: 'free',
-    isBeta: true,
-    // href intentionally omitted — docs not yet available
-    icon: <MetricsIcon />,
     industries: ['AEC'],
     capabilities: ['Document Management'],
   },
