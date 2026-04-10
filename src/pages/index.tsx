@@ -193,9 +193,11 @@ export default function Home() {
             </div>
           </div>
 
+          <hr className="aps-divider" />
+
           {/* Industry */}
           <div className="aps-filter-section">
-            <p className="aps-filter-label">Filter by industry</p>
+            <p className="aps-filter-label">Industry</p>
             <div className="aps-pills">
               {INDUSTRIES.map((ind) => (
                 <button
@@ -210,9 +212,11 @@ export default function Home() {
             </div>
           </div>
 
+          <hr className="aps-divider" />
+
           {/* Capability */}
           <div className="aps-filter-section">
-            <p className="aps-filter-label">Filter by capability</p>
+            <p className="aps-filter-label">Capability</p>
             <div className="aps-pills">
               {CAPABILITIES.map((cap) => (
                 <button
@@ -246,40 +250,56 @@ export default function Home() {
               </button>
             </div>
           ) : (
-            <div className="aps-grid">
-              {filtered.map((api) => {
-                const cardContent = (
-                  <>
-                    <div className="aps-card-top">
-                      <span className="aps-card-icon" aria-hidden="true">{api.icon}</span>
-                      <div className="aps-card-badges">
-                        {api.isBeta && <span className="aps-badge aps-badge--beta">Beta</span>}
-                        {api.pricing === 'monetized' && (
-                          <span className="aps-badge aps-badge--dollar" title="Usage costs may apply">$</span>
+            <>
+              <p className="aps-result-count">
+                Showing {filtered.length} {filtered.length === 1 ? 'API' : 'APIs'}
+                {hasFilters && <button type="button" className="aps-result-clear" onClick={clearFilters}>Clear filters</button>}
+              </p>
+              <div className="aps-grid">
+                {filtered.map((api) => {
+                  const cardContent = (
+                    <>
+                      <div className="aps-card-top">
+                        <span className="aps-card-icon" aria-hidden="true">{api.icon}</span>
+                        <div className="aps-card-badges">
+                          {api.isBeta && <span className="aps-badge aps-badge--beta">Beta</span>}
+                          {!api.href && <span className="aps-badge aps-badge--soon">Coming soon</span>}
+                          {api.pricing === 'monetized' && (
+                            <span className="aps-badge aps-badge--dollar" title="Usage costs may apply">$</span>
+                          )}
+                        </div>
+                      </div>
+                      <h2 className="aps-card-title">{api.name}</h2>
+                      <p className="aps-card-desc">{api.description}</p>
+                      <div className="aps-card-footer">
+                        <div className="aps-card-tags">
+                          {api.capabilities.map((c) => (
+                            <span key={c} className="aps-card-tag">{c}</span>
+                          ))}
+                        </div>
+                        {api.href && (
+                          <span className="aps-card-cta">
+                            Explore
+                            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                              <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </span>
                         )}
                       </div>
+                    </>
+                  );
+                  return api.href ? (
+                    <Link key={api.id} to={api.href} className="aps-card">
+                      {cardContent}
+                    </Link>
+                  ) : (
+                    <div key={api.id} className="aps-card aps-card--disabled">
+                      {cardContent}
                     </div>
-                    <h2 className="aps-card-title">{api.name}</h2>
-                    <p className="aps-card-desc">{api.description}</p>
-                    <span className="aps-card-cta">
-                      Explore API
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                        <path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </span>
-                  </>
-                );
-                return api.href ? (
-                  <Link key={api.id} to={api.href} className="aps-card">
-                    {cardContent}
-                  </Link>
-                ) : (
-                  <div key={api.id} className="aps-card aps-card--disabled">
-                    {cardContent}
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            </>
           )}
         </main>
       </div>
