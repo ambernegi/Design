@@ -119,11 +119,13 @@ const sidebars = {
       collapsed: false,
       link: { type: 'doc', id: 'mt-api/v1/reference/http/mt-api/index' },
       items: [
+        'mt-api/v1/reference/api-reference',
         'mt-api/v1/reference/http/mt-api/post-machine-translate',
         'mt-api/v1/reference/http/mt-api/get-version',
         'mt-api/v1/reference/http/mt-api/get-languages',
       ],
     },
+    { type: 'doc', id: 'mt-api/changelog', label: 'Changelog' },
   ],
 
 };
