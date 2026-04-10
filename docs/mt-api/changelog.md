@@ -1,7 +1,9 @@
 ---
 id: changelog
 title: "Machine Translation API Changelog"
+description: "Version history and release notes for the Autodesk Machine Translation API."
 sidebar_label: "Changelog"
+sidebar_position: 99
 slug: "/mt-api/changelog"
 ---
 

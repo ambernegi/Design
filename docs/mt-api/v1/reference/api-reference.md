@@ -1,7 +1,9 @@
 ---
 id: api-reference
 title: "Machine Translation API Reference"
+description: "Complete API reference for the Autodesk Machine Translation API, including endpoints, authentication, request/response schemas, and error codes."
 sidebar_label: "API Reference"
+sidebar_position: 1
 slug: "/mt-api/v1/reference"
 ---
 
