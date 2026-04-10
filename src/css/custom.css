@@ -747,13 +747,14 @@ article.theme-doc-markdown {
   border-color: rgba(255,255,255,0.1);
 }
 .aps-badge--dollar {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0;
   border-radius: 50%;
   background: var(--aps-ink);
   color: var(--aps-white);
   border: none;
+  font-size: 0.77rem;
 }
 [data-theme='dark'] .aps-badge--dollar {
   background: rgba(255,255,255,0.14);
