@@ -51,9 +51,11 @@ curl -X POST \
   -H "Authorization: Bearer <YOUR_TOKEN>" \
   -H "Content-Type: application/json" \
   -d '{
-    "sourceContent": "Hello, world!",
-    "sourceLanguage": "en-US",
-    "targetLanguage": "fr-FR"
+    "sourceLanguageCode": "en-US",
+    "targetLanguageCode": "fr-FR",
+    "textToTranslate": [
+      { "source": "Hello, world!" }
+    ]
   }'
 ```
 
@@ -63,9 +65,22 @@ A successful `200` response returns the translated text:
 
 ```json
 {
-  "targetContent": "Bonjour, le monde!",
-  "sourceLanguage": "en-US",
-  "targetLanguage": "fr-FR"
+  "translations": [
+    { "translatedText": "Bonjour, le monde !" }
+  ],
+  "duration": 0.123,
+  "route": {
+    "name": "Production general model for fr",
+    "source": "^(en|en-us)$",
+    "target": "^(fr|fr-fr)$",
+    "provider": {
+      "name": "microsoft",
+      "option": {
+        "category": "9489b789-xxxx-4d53-xxxx-3dae52ab73c7-TECH",
+        "description": "Production general model for fr"
+      }
+    }
+  }
 }
 ```
 
