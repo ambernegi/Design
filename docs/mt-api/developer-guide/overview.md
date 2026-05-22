@@ -19,9 +19,13 @@ The Machine Translation API provides programmatic access to Autodesk's neural ma
 | Concept | Description |
 |---------|-------------|
 | Translation request | A single call to `POST /machine-translate` with source text and a target language |
-| Language code | BCP-47 language tags, e.g. `en-US`, `fr-FR`, `ja-JP` |
+| Language code | BCP-47 language tags. **Source** is restricted to `en-US` or `en-GB`. **Target** supports 17 languages — call `GET /languages` for the full list. |
 | 2-legged auth | Client credentials flow — for server-to-server calls on behalf of your app |
 | 3-legged auth | Authorization code flow — for calls on behalf of a specific user |
+
+:::note
+When source is `en-GB`, target must be `en-US` and vice versa. Each request can contain 1–20 text items for translation.
+:::
 
 ## Base URL
 
