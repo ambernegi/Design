@@ -71,7 +71,14 @@ Represents a translation request containing source text and language specificati
 | `401` | Authentication failed. Verify that your access token is valid and not expired. |
 | `404` | The requested translation service or language pair is not available. |
 | `422` | The request was well-formed but contains invalid parameters or unsupported language combinations. |
+| `429` | Rate limit exceeded. Retry after the interval specified in the `Retry-After` response header. |
 | `500` | An unexpected error occurred while processing the translation request. |
+
+### Response Headers — 429 Too Many Requests
+
+| Name | Type | Description |
+|------|------|-------------|
+| `Retry-After` | `integer` | The number of seconds the client should wait before retrying the request. |
 
 ### Response Body — 200 OK
 
@@ -118,7 +125,7 @@ Represents the synchronous translation response containing translated text for e
 
 ### Error Response Body
 
-Returned for `400`, `401`, `404`, `422`, and `500` responses.
+Returned for `400`, `401`, `404`, `422`, `429`, and `500` responses.
 
 | Property | Type | Description |
 |----------|------|-------------|
