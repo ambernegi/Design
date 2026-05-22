@@ -103,6 +103,7 @@ const sidebars = {
       items: [
         'mt-api/developer-guide/troubleshooting',
         'mt-api/developer-guide/faq',
+        'mt-api/developer-guide/rate-limits',
       ],
     },
     {
