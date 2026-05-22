@@ -12,7 +12,7 @@ This guide walks you through making your first successful call to the Machine Tr
 
 - An APS application registered at the [APS Portal](https://aps.autodesk.com)
 - Client ID and Client Secret for your app
-- `data:read` and `data:create` scopes enabled
+- `data:read` scope enabled
 - `curl` or an HTTP client of your choice
 
 ## Step 1 — Obtain an access token
@@ -26,7 +26,7 @@ curl -X POST \
   -d "grant_type=client_credentials" \
   -d "client_id=<YOUR_CLIENT_ID>" \
   -d "client_secret=<YOUR_CLIENT_SECRET>" \
-  -d "scope=data:read data:create"
+  -d "scope=data:read"
 ```
 
 Copy the `access_token` value from the response.

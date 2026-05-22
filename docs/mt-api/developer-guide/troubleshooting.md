@@ -12,7 +12,7 @@ sidebar_position: 2
 
 Your access token is missing, expired, or does not include the required scopes.
 
-**Fix:** Re-request a token and confirm you are requesting `data:read` and `data:create` scopes. Check that the token is passed in the `Authorization: Bearer <token>` header.
+**Fix:** Re-request a token and confirm you are requesting the `data:read` scope. Check that the token is passed in the `Authorization: Bearer <token>` header.
 
 ### 400 Bad Request
 
@@ -43,7 +43,7 @@ An unexpected error occurred on the server side.
 Before opening a support ticket, verify the following:
 
 - [ ] Token is valid and not expired
-- [ ] Token includes the required scopes (`data:read`, `data:create`)
+- [ ] Token includes the required scope (`data:read`)
 - [ ] Request body is valid JSON
 - [ ] `sourceLanguage` and `targetLanguage` are supported BCP-47 codes
 - [ ] You are not exceeding the rate limit

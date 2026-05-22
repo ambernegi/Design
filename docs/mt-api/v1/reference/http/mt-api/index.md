@@ -34,5 +34,3 @@ Token URL: `https://developer.api.autodesk.com/authentication/v2/token`
 | Scope | Description |
 |-------|-------------|
 | `data:read` | Read access to translation data and settings |
-| `data:write` | Modify translation settings and preferences |
-| `data:create` | Create new translation requests and configurations |

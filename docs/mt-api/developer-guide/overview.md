@@ -36,14 +36,12 @@ All endpoints require an OAuth 2.0 bearer token. Request the following scopes wh
 | Scope | Purpose |
 |-------|---------|
 | `data:read` | Read translation data and settings |
-| `data:write` | Modify translation settings and preferences |
-| `data:create` | Submit new translation requests |
 
 Token URL: `https://developer.api.autodesk.com/authentication/v2/token`
 
 ## Before you begin
 
 1. Register your app at the [APS Portal](https://aps.autodesk.com).
-2. Enable the `data:read` and `data:create` scopes for your app.
+2. Enable the `data:read` scope for your app.
 3. Obtain an access token using the OAuth 2.0 client credentials flow.
 4. Call `GET /languages` to confirm your target language is supported.

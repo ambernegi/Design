@@ -31,7 +31,7 @@ Translation requests are not stored after the response is returned. See Autodesk
 
 ## Can I use this API in a frontend application?
 
-The Machine Translation API requires a server-side OAuth token with `data:create` scope. To use it from a frontend, proxy requests through your own backend service rather than exposing credentials in the browser.
+The Machine Translation API requires a server-side OAuth token. To use it from a frontend, proxy requests through your own backend service rather than exposing credentials in the browser.
 
 ## What happens if a language pair is unsupported?
 
