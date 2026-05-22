@@ -112,6 +112,7 @@ const sidebars = {
       collapsed: false,
       items: [
         'mt-api/how-to-guide/getting-started',
+        'mt-api/how-to-guide/batch-translation',
       ],
     },
     {
