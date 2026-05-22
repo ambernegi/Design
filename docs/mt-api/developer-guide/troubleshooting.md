@@ -12,19 +12,25 @@ sidebar_position: 2
 
 Your access token is missing, expired, or does not include the required scopes.
 
-**Fix:** Re-request a token and confirm you are requesting `data:read` and `data:create` scopes. Check that the token is passed in the `Authorization: Bearer <token>` header.
+**Fix:** Re-request a token and confirm you are requesting the `data:read` scope. Check that the token is passed in the `Authorization: Bearer <token>` header.
 
 ### 400 Bad Request
 
 The request body is malformed or a required field is missing.
 
-**Fix:** Verify that `sourceContent`, `sourceLanguage`, and `targetLanguage` are all present and non-empty. Confirm the request body is valid JSON with `Content-Type: application/json`.
+**Fix:** Verify that `sourceLanguageCode`, `targetLanguageCode`, and `textToTranslate` are all present and non-empty. Each `textToTranslate` item must include a `source` field. Confirm the request body is valid JSON with `Content-Type: application/json`.
 
 ### 422 Unprocessable Entity
 
 The source or target language code is not recognized by the API.
 
 **Fix:** Call `GET /languages` to retrieve the current list of supported BCP-47 language codes and confirm your values match exactly.
+
+### 404 Not Found
+
+The requested translation service or language pair is not available.
+
+**Fix:** Call `GET /languages` to confirm that both `sourceLanguageCode` and `targetLanguageCode` are supported. Remember that the source language must be `en-US` or `en-GB`, and the en-GB ↔ en-US swap rule applies (when source is `en-GB`, target must be `en-US` and vice versa).
 
 ### 429 Too Many Requests
 
@@ -43,9 +49,10 @@ An unexpected error occurred on the server side.
 Before opening a support ticket, verify the following:
 
 - [ ] Token is valid and not expired
-- [ ] Token includes the required scopes (`data:read`, `data:create`)
+- [ ] Token includes the required scope (`data:read`)
 - [ ] Request body is valid JSON
-- [ ] `sourceLanguage` and `targetLanguage` are supported BCP-47 codes
+- [ ] `sourceLanguageCode` is `en-US` or `en-GB`; `targetLanguageCode` is a supported BCP-47 target code
+- [ ] Both `sourceLanguageCode` and `targetLanguageCode` are supported (call `GET /languages` to verify)
 - [ ] You are not exceeding the rate limit
 
 ## Getting help

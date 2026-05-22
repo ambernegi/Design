@@ -103,6 +103,7 @@ const sidebars = {
       items: [
         'mt-api/developer-guide/troubleshooting',
         'mt-api/developer-guide/faq',
+        'mt-api/developer-guide/rate-limits',
       ],
     },
     {
@@ -111,6 +112,7 @@ const sidebars = {
       collapsed: false,
       items: [
         'mt-api/how-to-guide/getting-started',
+        'mt-api/how-to-guide/batch-translation',
       ],
     },
     {

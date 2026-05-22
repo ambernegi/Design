@@ -25,6 +25,7 @@ This operation has no request parameters or request body.
 | Status Code | Description |
 |-------------|-------------|
 | `200` | The API version information was successfully retrieved. |
+| `500` | An unexpected error occurred while retrieving the API version information. |
 
 ### Response Body — 200 OK
 

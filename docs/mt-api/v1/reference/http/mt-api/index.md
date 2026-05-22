@@ -1,6 +1,6 @@
 ---
 title: MT-API HTTP Reference
-description: HTTP API reference for the Autodesk Machine Translation API v1.0.57
+description: HTTP API reference for the Autodesk Machine Translation API
 sidebar_position: 1
 ---
 
@@ -34,5 +34,21 @@ Token URL: `https://developer.api.autodesk.com/authentication/v2/token`
 | Scope | Description |
 |-------|-------------|
 | `data:read` | Read access to translation data and settings |
-| `data:write` | Modify translation settings and preferences |
-| `data:create` | Create new translation requests and configurations |
+
+## Errors
+
+All endpoints in this API return a shared error envelope for any `4xx` or `5xx` response.
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `title` | `string` | A brief, human-readable summary of the error. Examples: `"Bad Request"`, `"Unauthorized"`, `"Not Found"`. |
+| `detail` | `string` | A detailed description of the error, including specific information about what went wrong and how to fix it. |
+
+**Example**
+
+```json
+{
+  "title": "Bad Request",
+  "detail": "sourceLanguageCode is missing."
+}
+```

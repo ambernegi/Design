@@ -31,6 +31,8 @@ This operation has no request parameters or request body.
 | Status Code | Description |
 |-------------|-------------|
 | `200` | The list of supported languages was successfully retrieved. |
+| `401` | Authentication failed. Verify that your access token is valid and not expired. |
+| `500` | An unexpected error occurred while retrieving the list of supported languages. |
 
 ### Response Body — 200 OK
 
@@ -62,4 +64,22 @@ Returns an array of language objects.
     "AutodeskNMT": false
   }
 ]
+```
+
+### Error Response Body
+
+Returned for `401` and `500` responses. Uses the shared error envelope documented in the [MT-API HTTP Reference](./index.md#errors).
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `title` | `string` | A brief, human-readable summary of the error. Examples: `"Unauthorized"`, `"Internal Server Error"`. |
+| `detail` | `string` | A detailed description of the error, including specific information about what went wrong and how to fix it. |
+
+**Example**
+
+```json
+{
+  "title": "Unauthorized",
+  "detail": "Access token is invalid or expired."
+}
 ```
