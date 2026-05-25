@@ -1,4 +1,35 @@
 // @ts-check
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Scan `.claude/skills/<name>/SKILL.md` and build a map of
+ *   { [name]: { description, body } }
+ * so the docs site can inline the skill instructions into a
+ * "Run in Claude" deep link at build time.
+ */
+function loadClaudeSkills() {
+  const skillsDir = path.join(__dirname, '.claude', 'skills');
+  /** @type {Record<string, {description: string, body: string}>} */
+  const skills = {};
+  if (!fs.existsSync(skillsDir)) return skills;
+  for (const entry of fs.readdirSync(skillsDir, {withFileTypes: true})) {
+    if (!entry.isDirectory()) continue;
+    const file = path.join(skillsDir, entry.name, 'SKILL.md');
+    if (!fs.existsSync(file)) continue;
+    const raw = fs.readFileSync(file, 'utf8');
+    const fm = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+    let description = '';
+    let body = raw;
+    if (fm) {
+      const descMatch = fm[1].match(/^description:\s*(.+)$/m);
+      description = descMatch ? descMatch[1].trim().replace(/^["']|["']$/g, '') : '';
+      body = fm[2].trim();
+    }
+    skills[entry.name] = {description, body};
+  }
+  return skills;
+}
 
 /**
  * Workaround for Node 24 / webpack 5.106+:
@@ -103,10 +134,17 @@ const config = {
 
   plugins: [webpackBarPatch],
 
-  // Used by the "Run as Claude Skill" button to build a vscode://file/...
-  // deep link to the skill source. Override at build time via
-  // LOCAL_PROJECT_PATH=/abs/path/to/repo npm run build (or start).
+  // Surfaced to the React layer for the "Run as Claude Skill" button.
+  //   claudeSkills      — map of {name: {description, body}} loaded from
+  //                       .claude/skills/<name>/SKILL.md at build time.
+  //                       Used to build a https://claude.ai/new?q=... deep
+  //                       link with the full skill instructions inlined.
+  //   localProjectPath  — optional absolute repo path for a fallback
+  //                       vscode://file/... link to open the skill source
+  //                       in a local checkout. Set via
+  //                       LOCAL_PROJECT_PATH=/abs/path npm start.
   customFields: {
+    claudeSkills: loadClaudeSkills(),
     localProjectPath: process.env.LOCAL_PROJECT_PATH || '',
   },
 

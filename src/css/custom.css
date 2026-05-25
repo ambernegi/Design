@@ -836,159 +836,725 @@ article.theme-doc-markdown {
 .aps-card:hover .aps-card-cta { gap: 0.5rem; }
 
 /* ============================================================
-   Claude Skill button (appears on docs that opt-in via frontmatter)
+   "Run with Claude" floating action — opt-in via the topic's
+   `claudeSkill:` frontmatter. Closed = a small pill in the
+   bottom-right. Open = a 380px card with three options for
+   where to run the skill. Two of those options drill into a
+   short, numbered install flow.
    ============================================================ */
-.claude-skill-wrap {
-  position: relative;
-  margin: 0 0 1.5rem;
-  display: inline-block;
+/* Motion tokens — Material Design 3 easing & duration scale.
+   Use these for every animation in this block so motion stays
+   consistent and feels coordinated. */
+.claude-skill-fab-root {
+  --skill-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --skill-ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --skill-ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --skill-dur-short: 180ms;
+  --skill-dur-medium: 280ms;
+  --skill-dur-long: 420ms;
+
+  position: fixed;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  z-index: 200;
+  font-family: var(--ifm-font-family-base);
+  animation: claudeSkillRootIn var(--skill-dur-long) var(--skill-ease-emphasized) 200ms both;
 }
 
-.claude-skill-btn {
+@keyframes claudeSkillRootIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Closed launcher ---------- */
+.claude-skill-fab {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.85rem;
-  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  gap: 0.55rem;
+  /* Symmetric padding by default → collapsed state is a true circle.
+     The reveal animation morphs padding-right and border-radius
+     from circle to pill. */
+  padding: 0.4rem;
+  background: linear-gradient(180deg, #1f2937 0%, #0b1220 100%);
   color: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 50%;
   font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
-}
-.claude-skill-btn:hover {
-  filter: brightness(1.05);
-  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.3);
-}
-.claude-skill-btn:active { transform: translateY(1px); }
-
-.claude-skill-btn-tag {
-  font-family: var(--ifm-font-family-monospace);
-  font-size: 0.75rem;
-  padding: 0.1rem 0.4rem;
-  background: rgba(0, 0, 0, 0.18);
-  border-radius: 4px;
   font-weight: 500;
+  letter-spacing: 0.005em;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.22);
+  /* Reveal — circle holds briefly, then morphs into a pill.
+     Runs once per page open (FAB stays mounted across panel open/close). */
+  animation: claudeSkillFabReveal 1400ms var(--skill-ease-emphasized) 700ms both;
+  transition:
+    opacity var(--skill-dur-medium) var(--skill-ease-standard),
+    transform var(--skill-dur-medium) var(--skill-ease-standard),
+    box-shadow var(--skill-dur-medium) var(--skill-ease-emphasized),
+    border-color var(--skill-dur-short) var(--skill-ease-standard);
 }
 
-.claude-skill-popover {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 0;
-  z-index: 50;
-  width: 360px;
-  background: var(--aps-white);
-  border: 1px solid var(--aps-border);
-  border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  padding: 1rem 1rem 0.85rem;
+@keyframes claudeSkillFabReveal {
+  0%, 22% {
+    padding-right: 0.4rem;
+    border-radius: 50%;
+  }
+  100% {
+    padding-right: 1rem;
+    border-radius: 999px;
+  }
 }
 
-.claude-skill-popover-header {
-  display: flex;
+/* Label clip — grows its width independently of the FAB so the icon
+   stays in its natural place and never looks squashed. */
+.claude-skill-fab-label-clip {
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.4rem;
+  overflow: hidden;
+  max-width: 0;
+  margin-left: -0.55rem; /* cancel flex gap during the collapsed hold */
+  animation: claudeSkillFabClipReveal 1400ms var(--skill-ease-emphasized) 700ms both;
 }
-.claude-skill-popover-title {
-  font-size: 0.92rem;
+
+@keyframes claudeSkillFabClipReveal {
+  0%, 22% {
+    max-width: 0;
+    margin-left: -0.55rem;
+  }
+  100% {
+    max-width: 320px;
+    margin-left: 0;
+  }
+}
+
+/* Hidden state when the panel is open. Transition (not animation)
+   so opening/closing the panel never replays the reveal. */
+.claude-skill-fab--hidden {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+.claude-skill-fab::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(251, 191, 36, 0.45) 0%,
+    rgba(251, 191, 36, 0) 60%
+  );
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.claude-skill-fab:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.14),
+    0 14px 32px rgba(0, 0, 0, 0.3);
+}
+.claude-skill-fab:hover::before {
+  opacity: 1;
+}
+.claude-skill-fab:active {
+  transform: translateY(0);
+}
+
+/* Inner two-tone icon badge — small tinted disc holding the sparkle */
+.claude-skill-fab-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+  color: #ffffff;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.25);
+}
+.claude-skill-fab-icon::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.32);
+  filter: blur(5px);
+  opacity: 0;
+  z-index: -1;
+  animation: claudeSkillBreathe 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.claude-skill-fab-label {
+  font-feature-settings: 'ss01', 'ss02';
+  white-space: nowrap;
+  /* Label lands after the clip has expanded — small soft-blur reveal. */
+  animation: claudeSkillFabLabelIn 480ms var(--skill-ease-emphasized) 1500ms both;
+}
+
+@keyframes claudeSkillFabLabelIn {
+  from { opacity: 0; transform: translateX(-4px); filter: blur(2px); }
+  to { opacity: 1; transform: translateX(0); filter: blur(0); }
+}
+
+/* Slower, lower-amplitude breathing — more "ambient" than "blinking" */
+@keyframes claudeSkillBreathe {
+  0%, 100% { opacity: 0; transform: scale(0.94); }
+  50% { opacity: 0.55; transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .claude-skill-fab-icon::after { animation: none; }
+}
+
+/* ---------- Expanded panel ---------- */
+.claude-skill-panel {
+  width: 384px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(249, 250, 251, 0.6) 100%),
+    var(--aps-white);
+  border: 1px solid var(--aps-border);
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    0 30px 60px -10px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transform-origin: bottom right;
+  animation: claudeSkillPanelIn var(--skill-dur-long) var(--skill-ease-emphasized);
+}
+
+@keyframes claudeSkillPanelIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header fades in slightly later than the panel — adds the "layered" feel
+   of Material/Stripe-style enterprise transitions */
+.claude-skill-panel-header {
+  animation: claudeSkillSlideUp var(--skill-dur-long) var(--skill-ease-emphasized) 60ms both;
+}
+
+@keyframes claudeSkillSlideUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.claude-skill-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.05rem 1.15rem 0.85rem;
+}
+
+.claude-skill-panel-titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.claude-skill-panel-title {
+  font-size: 1.02rem;
   font-weight: 600;
   color: var(--aps-ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
-.claude-skill-popover-close {
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  line-height: 1;
+
+.claude-skill-panel-sub {
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--aps-muted);
+}
+
+.claude-skill-panel-close {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
   color: var(--aps-muted);
   cursor: pointer;
-  padding: 0 0.25rem;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
-.claude-skill-popover-close:hover { color: var(--aps-ink); }
-
-.claude-skill-popover-desc {
-  margin: 0 0 0.75rem;
-  font-size: 0.82rem;
-  color: var(--aps-body);
-  line-height: 1.5;
+.claude-skill-panel-close:hover {
+  background: var(--aps-surface);
+  border-color: var(--aps-border);
+  color: var(--aps-ink);
 }
 
-.claude-skill-steps {
-  margin: 0 0 0.75rem;
-  padding-left: 1.1rem;
-  font-size: 0.82rem;
-  color: var(--aps-body);
-  line-height: 1.55;
+/* ---------- Options list ---------- */
+.claude-skill-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.25rem 0.7rem 1rem;
 }
-.claude-skill-steps li + li { margin-top: 0.4rem; }
 
-.claude-skill-cmd {
+.claude-skill-option {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.35rem;
-  padding: 0.35rem 0.5rem;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--aps-ink);
+  text-decoration: none !important;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease,
+    box-shadow 0.2s ease;
+}
+.claude-skill-option:hover {
+  background: var(--aps-surface);
+  border-color: var(--aps-border);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 6px 16px -6px rgba(0, 0, 0, 0.1);
+}
+.claude-skill-option:hover .claude-skill-option-arrow {
+  transform: translateX(3px);
+  color: var(--aps-ink);
+}
+.claude-skill-option:hover .claude-skill-option-logo {
+  transform: scale(1.05) rotate(-2deg);
+}
+.claude-skill-option:hover .claude-skill-option-logo::after {
+  opacity: 1;
+}
+.claude-skill-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.claude-skill-option--disabled {
+  cursor: not-allowed;
+  color: var(--aps-muted);
+  font-size: 0.82rem;
+  justify-content: center;
+  border-color: var(--aps-border);
+  background: var(--aps-surface);
+}
+
+.claude-skill-option-logo {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+    0 2px 4px rgba(0, 0, 0, 0.12);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.claude-skill-option-logo::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 16px;
+  background: inherit;
+  filter: blur(10px);
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+.claude-skill-option-logo--claude {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 55%, #92400e 100%);
+}
+.claude-skill-option-logo--cursor {
+  background: linear-gradient(135deg, #374151 0%, #111827 60%, #030712 100%);
+}
+.claude-skill-option-logo--cc {
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 40%, #075985 100%);
+}
+
+.claude-skill-option-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.claude-skill-option-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--aps-ink);
+}
+
+.claude-skill-option-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  background: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  border-radius: 4px;
+}
+
+.claude-skill-option-sub {
+  font-size: 0.78rem;
+  color: var(--aps-muted);
+  line-height: 1.4;
+}
+
+.claude-skill-option-arrow {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--aps-subtle);
+  transition: transform 0.15s ease, color 0.12s;
+}
+
+/* ---------- Drill-down flow ---------- */
+.claude-skill-flow {
+  padding: 0 1.15rem 1.15rem;
+}
+
+.claude-skill-back {
+  background: none;
+  border: none;
+  color: var(--aps-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 0 0.2rem;
+  margin-bottom: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.claude-skill-back:hover { color: var(--aps-ink); }
+
+.claude-skill-flow-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.95rem;
+  color: var(--aps-ink);
+}
+
+.claude-skill-flow-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   background: var(--aps-surface);
   border: 1px solid var(--aps-border);
-  border-radius: 6px;
+  color: var(--aps-ink);
+}
+
+/* Numbered steps with a thin connecting thread */
+.claude-skill-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+/* Vertical thread connecting the step numbers */
+.claude-skill-steps::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 22px;
+  bottom: 22px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    var(--aps-border) 0%,
+    var(--aps-border) 50%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
+.claude-skill-step {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.claude-skill-step-num {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-top: 0.05rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1f2937 0%, #050505 100%);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 0 0 3px var(--aps-white);
+}
+
+.claude-skill-step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.claude-skill-step-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--aps-ink);
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+}
+
+.claude-skill-step-hint {
+  font-size: 0.79rem;
+  color: var(--aps-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+.claude-skill-step-hint code {
+  font-size: 0.75rem;
+  padding: 0.06rem 0.3rem;
+}
+.claude-skill-step-hint kbd {
+  display: inline-block;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.72rem;
+  padding: 0.05rem 0.35rem;
+  background: var(--aps-surface);
+  border: 1px solid var(--aps-border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--aps-ink);
+  vertical-align: 1px;
+}
+
+/* Download CTA */
+.claude-skill-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.95rem;
+  background: linear-gradient(180deg, #1f2937 0%, #0b1220 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.claude-skill-download-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+}
+.claude-skill-download-btn:hover svg {
+  transform: translateY(1px);
+}
+.claude-skill-download-btn svg {
+  transition: transform 0.18s ease;
+}
+.claude-skill-download-btn code {
+  font-size: 0.74rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.08rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Command + copy row */
+.claude-skill-cmd {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: var(--aps-surface);
+  border: 1px solid var(--aps-border);
+  border-radius: 7px;
+  overflow: hidden;
 }
 .claude-skill-cmd code {
   flex: 1;
   font-family: var(--ifm-font-family-monospace);
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   color: var(--aps-ink);
   background: none;
-  padding: 0;
+  border: none;
+  padding: 0.45rem 0.6rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.claude-skill-cmd code::-webkit-scrollbar {
+  height: 4px;
+}
+.claude-skill-cmd code::-webkit-scrollbar-thumb {
+  background: var(--aps-border);
+  border-radius: 4px;
 }
 
 .claude-skill-copy {
+  flex-shrink: 0;
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.2rem 0.55rem;
-  background: var(--ifm-color-primary);
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.claude-skill-copy:hover { background: var(--ifm-color-primary-dark); }
-
-.claude-skill-links {
-  border-top: 1px solid var(--aps-border);
-  padding-top: 0.6rem;
-  font-size: 0.78rem;
-}
-.claude-skill-link {
-  color: var(--ifm-color-primary);
-  text-decoration: none;
-  font-weight: 500;
-}
-.claude-skill-link:hover { text-decoration: underline; }
-.claude-skill-link--muted {
+  padding: 0 0.7rem;
+  background: transparent;
   color: var(--aps-muted);
-  font-weight: 400;
+  border: none;
+  border-left: 1px solid var(--aps-border);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
 }
-.claude-skill-link--muted code {
-  font-size: 0.75rem;
-  background: var(--aps-surface);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
+.claude-skill-copy:hover {
+  background: var(--aps-white);
+  color: var(--aps-ink);
 }
 
-[data-theme='dark'] .claude-skill-popover {
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .claude-skill-fab-root {
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+  .claude-skill-panel {
+    width: 100%;
+  }
+}
+
+/* ---------- Dark mode ---------- */
+[data-theme='dark'] .claude-skill-fab {
+  background: #ffffff;
+  color: var(--aps-ink);
+  border-color: rgba(0, 0, 0, 0.04);
+}
+[data-theme='dark'] .claude-skill-fab:hover {
+  background: #f3f4f6;
+}
+[data-theme='dark'] .claude-skill-fab svg {
+  color: #b45309;
+}
+[data-theme='dark'] .claude-skill-panel {
   background: #1f2937;
   border-color: rgba(255, 255, 255, 0.08);
 }
-[data-theme='dark'] .claude-skill-popover-title { color: #f9fafb; }
-[data-theme='dark'] .claude-skill-popover-desc,
-[data-theme='dark'] .claude-skill-steps { color: rgba(255, 255, 255, 0.75); }
+[data-theme='dark'] .claude-skill-panel-title { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-panel-sub { color: rgba(255, 255, 255, 0.6); }
+[data-theme='dark'] .claude-skill-option {
+  color: #f9fafb;
+}
+[data-theme='dark'] .claude-skill-option:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+[data-theme='dark'] .claude-skill-option:hover .claude-skill-option-arrow {
+  color: #f9fafb;
+}
+[data-theme='dark'] .claude-skill-option-title { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-option-sub { color: rgba(255, 255, 255, 0.55); }
+[data-theme='dark'] .claude-skill-option-tag {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+[data-theme='dark'] .claude-skill-back:hover { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-flow-title { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-flow-icon {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #f9fafb;
+}
+[data-theme='dark'] .claude-skill-step-num {
+  background: #ffffff;
+  color: var(--aps-ink);
+}
+[data-theme='dark'] .claude-skill-step-label { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-step-hint { color: rgba(255, 255, 255, 0.65); }
+[data-theme='dark'] .claude-skill-step-hint kbd {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #f9fafb;
+}
+[data-theme='dark'] .claude-skill-download-btn {
+  background: #ffffff;
+  color: var(--aps-ink);
+  border-color: #ffffff;
+}
+[data-theme='dark'] .claude-skill-download-btn:hover {
+  background: #e5e7eb;
+}
+[data-theme='dark'] .claude-skill-download-btn code {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--aps-ink);
+}
 [data-theme='dark'] .claude-skill-cmd {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.08);
 }
 [data-theme='dark'] .claude-skill-cmd code { color: #f9fafb; }
-[data-theme='dark'] .claude-skill-links { border-top-color: rgba(255, 255, 255, 0.08); }
+[data-theme='dark'] .claude-skill-copy {
+  border-left-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+}
+[data-theme='dark'] .claude-skill-copy:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f9fafb;
+}
+
