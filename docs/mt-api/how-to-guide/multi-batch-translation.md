@@ -1,3 +1,13 @@
+---
+title: Multi-Batch Translation
+description: Use a decision tree to predict customer purchase behavior based on income, age, and previous purchases.
+sidebar_position: 3
+claudeSkill:
+  name: multi-batch-translation
+  description: Walks you through building a multi-tree decision model for customer purchase prediction.
+  path: .claude/skills/multi-batch-translation/SKILL.md
+---
+
 # Multi-Batch Translation
 
 ## Decision Tree for Customer Prediction
