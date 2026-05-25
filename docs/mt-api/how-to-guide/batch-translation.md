@@ -2,6 +2,10 @@
 title: Batch Translation
 description: Translate multiple text items in a single request and map results back to their sources.
 sidebar_position: 2
+claudeSkill:
+  name: batch-translate
+  description: Walks you through batch-translating up to 20 strings via the Machine Translation API.
+  path: .claude/skills/batch-translate/SKILL.md
 ---
 
 # Batch Translation

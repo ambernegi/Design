@@ -103,6 +103,13 @@ const config = {
 
   plugins: [webpackBarPatch],
 
+  // Used by the "Run as Claude Skill" button to build a vscode://file/...
+  // deep link to the skill source. Override at build time via
+  // LOCAL_PROJECT_PATH=/abs/path/to/repo npm run build (or start).
+  customFields: {
+    localProjectPath: process.env.LOCAL_PROJECT_PATH || '',
+  },
+
   presets: [
     [
       'classic',

@@ -834,3 +834,161 @@ article.theme-doc-markdown {
   transition: gap 0.15s;
 }
 .aps-card:hover .aps-card-cta { gap: 0.5rem; }
+
+/* ============================================================
+   Claude Skill button (appears on docs that opt-in via frontmatter)
+   ============================================================ */
+.claude-skill-wrap {
+  position: relative;
+  margin: 0 0 1.5rem;
+  display: inline-block;
+}
+
+.claude-skill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+}
+.claude-skill-btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 2px 6px rgba(180, 83, 9, 0.3);
+}
+.claude-skill-btn:active { transform: translateY(1px); }
+
+.claude-skill-btn-tag {
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.claude-skill-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 360px;
+  background: var(--aps-white);
+  border: 1px solid var(--aps-border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  padding: 1rem 1rem 0.85rem;
+}
+
+.claude-skill-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.claude-skill-popover-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--aps-ink);
+}
+.claude-skill-popover-close {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--aps-muted);
+  cursor: pointer;
+  padding: 0 0.25rem;
+}
+.claude-skill-popover-close:hover { color: var(--aps-ink); }
+
+.claude-skill-popover-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  color: var(--aps-body);
+  line-height: 1.5;
+}
+
+.claude-skill-steps {
+  margin: 0 0 0.75rem;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--aps-body);
+  line-height: 1.55;
+}
+.claude-skill-steps li + li { margin-top: 0.4rem; }
+
+.claude-skill-cmd {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--aps-surface);
+  border: 1px solid var(--aps-border);
+  border-radius: 6px;
+}
+.claude-skill-cmd code {
+  flex: 1;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.82rem;
+  color: var(--aps-ink);
+  background: none;
+  padding: 0;
+}
+
+.claude-skill-copy {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  background: var(--ifm-color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.claude-skill-copy:hover { background: var(--ifm-color-primary-dark); }
+
+.claude-skill-links {
+  border-top: 1px solid var(--aps-border);
+  padding-top: 0.6rem;
+  font-size: 0.78rem;
+}
+.claude-skill-link {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+.claude-skill-link:hover { text-decoration: underline; }
+.claude-skill-link--muted {
+  color: var(--aps-muted);
+  font-weight: 400;
+}
+.claude-skill-link--muted code {
+  font-size: 0.75rem;
+  background: var(--aps-surface);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+[data-theme='dark'] .claude-skill-popover {
+  background: #1f2937;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme='dark'] .claude-skill-popover-title { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-popover-desc,
+[data-theme='dark'] .claude-skill-steps { color: rgba(255, 255, 255, 0.75); }
+[data-theme='dark'] .claude-skill-cmd {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme='dark'] .claude-skill-cmd code { color: #f9fafb; }
+[data-theme='dark'] .claude-skill-links { border-top-color: rgba(255, 255, 255, 0.08); }
