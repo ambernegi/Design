@@ -1,3 +1,13 @@
+---
+title: Multi-Batch Translation
+description: Understand multi-batch prediction using decision trees applied to customer purchase behavior.
+sidebar_position: 3
+claudeSkill:
+  name: multi-batch-translation
+  description: Walks you through multi-batch translation decisions using a decision tree model for customer purchase prediction.
+  path: .claude/skills/multi-batch-translation/SKILL.md
+---
+
 # Multi-Batch Translation
 
 Let's consider a decision tree for predicting whether a customer will buy a product based on age, income and previous purchases: Here's how the decision tree works:
